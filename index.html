@@ -14,8 +14,49 @@
 </head>
 <body>
 
+  <!-- Меню -->
+  <aside id="sideMenu" class="menu hidden">
+    <div class="menu-item">Расписание</div>
+    <div class="menu-item">Ученики</div>
+    <div class="menu-item">Аналитика</div>
+
+    <div class="menu-footer">
+      <button id="themeToggle">🌙 / ☀️</button>
+    </div>
+  </aside>
+
+  <!-- Затемнение -->
+  <div id="overlay" class="hidden"></div>
+
   <div id="app">
-    <!-- Здесь будет всё приложение -->
+
+    <!-- Шапка -->
+    <header class="header">
+      <button id="menuBtn" class="icon-btn">☰</button>
+
+      <button id="prevDay" class="icon-btn">‹</button>
+
+      <div class="header-center">
+        <div id="dayName" class="day-name">Понедельник</div>
+        <div id="date" class="date">19.02</div>
+      </div>
+
+      <button id="nextDay" class="icon-btn">›</button>
+    </header>
+
+    <!-- Мини-статистика -->
+    <section class="day-stats">
+      📊 Сегодня: 0 занятий • 0 ₽
+    </section>
+
+    <!-- Список занятий -->
+    <main class="lessons">
+      <!-- позже здесь будут строки занятий -->
+    </main>
+
+    <!-- Кнопка добавления -->
+    <button class="fab">＋</button>
+
   </div>
 
   <script src="script.js"></script>
