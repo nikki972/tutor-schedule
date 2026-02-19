@@ -1,0 +1,9 @@
+{
+  "name": "Расписание занятий",
+  "short_name": "Расписание",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#f5f1eb",
+  "theme_color": "#f5f1eb",
+  "icons": []
+}
