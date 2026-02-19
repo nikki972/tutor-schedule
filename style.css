@@ -119,3 +119,10 @@ body {
   background: rgba(0,0,0,0.3);
   z-index: 5;
 }
+
+/* ===== ПРАЗДНИКИ ===== */
+
+.header.holiday {
+  background: #ffecec;
+  color: #b00020;
+}
