@@ -1,11 +1,14 @@
 :root {
   --bg-color: #f5f1eb;
+  --card-color: #ffffff;
   --text-color: #1c1c1e;
+  --secondary-text: #6e6e73;
+  --accent: #007aff;
+  --danger: #ff3b30;
 }
 
 body {
   margin: 0;
-  padding: 0;
   font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
   background: var(--bg-color);
   color: var(--text-color);
@@ -13,4 +16,106 @@ body {
 
 #app {
   min-height: 100vh;
+  position: relative;
+}
+
+/* ===== ШАПКА ===== */
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 14px;
+  background: var(--card-color);
+  border-bottom: 1px solid #ddd;
+}
+
+.header-center {
+  text-align: center;
+  flex: 1;
+}
+
+.day-name {
+  font-weight: 600;
+}
+
+.date {
+  font-size: 13px;
+  color: var(--secondary-text);
+}
+
+.icon-btn {
+  background: none;
+  border: none;
+  font-size: 22px;
+  padding: 6px;
+  cursor: pointer;
+}
+
+/* ===== МИНИ-СТАТИСТИКА ===== */
+
+.day-stats {
+  padding: 10px 16px;
+  font-size: 14px;
+  color: var(--secondary-text);
+}
+
+/* ===== СПИСОК ===== */
+
+.lessons {
+  padding: 8px 12px 80px;
+}
+
+/* ===== FAB ===== */
+
+.fab {
+  position: fixed;
+  right: 16px;
+  bottom: 20px;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #fff;
+  font-size: 32px;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 6px 14px rgba(0,0,0,0.2);
+}
+
+/* ===== МЕНЮ ===== */
+
+.menu {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 260px;
+  height: 100%;
+  background: var(--card-color);
+  box-shadow: 4px 0 12px rgba(0,0,0,0.2);
+  padding: 20px;
+  z-index: 10;
+}
+
+.menu-item {
+  padding: 14px 0;
+  font-size: 18px;
+  border-bottom: 1px solid #eee;
+}
+
+.menu-footer {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+}
+
+.hidden {
+  display: none;
+}
+
+#overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.3);
+  z-index: 5;
 }
