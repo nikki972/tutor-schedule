@@ -11,7 +11,6 @@
 </head>
 <body>
 
-  <!-- Меню -->
   <aside id="sideMenu" class="menu hidden">
     <div class="menu-item">Расписание</div>
     <div class="menu-item">Ученики</div>
@@ -22,7 +21,6 @@
     </div>
   </aside>
 
-  <!-- Затемнение -->
   <div id="overlay" class="hidden"></div>
 
   <div id="app">
@@ -45,10 +43,51 @@
 
     <main class="lessons"></main>
 
-    <button class="fab" id="addLessonBtn">＋</button>
+    <button class="fab">＋</button>
 
   </div>
 
-  <script src="script.js"></script>
+  <div id="lessonModal" class="modal hidden">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <button id="closeModal" class="modal-btn">Отмена</button>
+        <div class="modal-title">Новое занятие</div>
+        <button id="saveLesson" class="modal-btn accent">Добавить</button>
+      </div>
+
+      <div class="modal-body">
+
+        <label>
+          Ученик
+          <select id="studentSelect">
+            <option>— выбрать —</option>
+          </select>
+        </label>
+
+        <label>
+          Предмет
+          <select id="subjectSelect">
+            <option value="math">Математика</option>
+            <option value="physics">Физика</option>
+          </select>
+        </label>
+
+        <label>
+          Дата
+          <input type="date" id="lessonDate">
+        </label>
+
+        <label>
+          Время начала
+          <input type="time" id="lessonTime">
+        </label>
+
+      </div>
+
+    </div>
+  </div>
+
+  <script type="module" src="script.js"></script>
 </body>
 </html>
