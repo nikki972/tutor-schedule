@@ -91,15 +91,15 @@ document.addEventListener('DOMContentLoaded', async () => {
     overlay.classList.add('hidden');
   };
 
-  function openModal() {
-    modal.classList.remove('hidden');
-    lessonDate.value = iso(currentDate);
-    lessonTime.value = '10:00';
-  }
+function openModal() {
+  modal.classList.add('active');
+  lessonDate.value = iso(currentDate);
+  lessonTime.value = '10:00';
+}
 
-  function closeLessonModal() {
-    modal.classList.add('hidden');
-  }
+function closeLessonModal() {
+  modal.classList.remove('active');
+}
 
   fab.onclick = openModal;
   closeModal.onclick = closeLessonModal;
