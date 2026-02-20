@@ -1,200 +1,63 @@
 :root {
-  --bg-color: #f5f1eb;
-  --card-color: #ffffff;
-  --text-color: #1c1c1e;
-  --secondary-text: #6e6e73;
-  --accent: #007aff;
-  --danger: #ff3b30;
+  --bg: #f6f4ef;
+  --card-bg: #ffffff;
+  --text: #111;
 }
 
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
-  background: var(--bg-color);
-  color: var(--text-color);
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--bg);
+  color: var(--text);
 }
 
-#app {
-  min-height: 100vh;
-  position: relative;
-}
-
-.header {
+.top-bar {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 12px 14px;
-  background: var(--card-color);
-  border-bottom: 1px solid #ddd;
+  padding: 12px;
 }
 
-.header-center {
+.date-header {
+  display: flex;
+  align-items: center;
+  margin: 0 auto;
+}
+
+#dateTitle {
   text-align: center;
-  flex: 1;
+  margin: 0 12px;
 }
 
-.day-name {
-  font-weight: 600;
-}
-
-.date {
-  font-size: 13px;
-  color: var(--secondary-text);
-}
-
-.icon-btn {
+.icon-btn,
+.nav-btn {
   background: none;
   border: none;
   font-size: 22px;
-  padding: 6px;
 }
 
-.day-stats {
-  padding: 10px 16px;
-  font-size: 14px;
-  color: var(--secondary-text);
-}
-
-.lessons {
-  padding: 8px 12px 80px;
-}
-
-.fab {
-  position: fixed;
-  right: 16px;
-  bottom: 20px;
-  width: 56px;
-  height: 56px;
-  border-radius: 50%;
-  background: var(--accent);
-  color: #fff;
-  font-size: 32px;
-  border: none;
-  box-shadow: 0 6px 14px rgba(0,0,0,0.2);
-}
-
-.menu {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 260px;
-  height: 100%;
-  background: var(--card-color);
-  box-shadow: 4px 0 12px rgba(0,0,0,0.2);
-  padding: 20px;
-  z-index: 10;
-}
-
-.menu-item {
-  padding: 14px 0;
-  font-size: 18px;
-  border-bottom: 1px solid #eee;
-}
-
-.menu-footer {
-  position: absolute;
-  bottom: 20px;
-  left: 20px;
-}
-
-.hidden {
-  display: none;
-}
-
-#overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.3);
-  z-index: 5;
-}
-
-.header.holiday {
-  background: #ffecec;
-  color: #b00020;
-}
-
-/* MODAL */
-
-.modal {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.35);
-  align-items: flex-end;
-  z-index: 20;
-  display: none;
-}
-
-.modal.active {
-  display: flex;
-}
-
-.modal-content {
-  width: 100%;
-  background: var(--card-color);
-  border-radius: 16px 16px 0 0;
-  padding-bottom: 20px;
-  animation: slideUp 0.25s ease-out;
-}
-
-@keyframes slideUp {
-  from { transform: translateY(100%); }
-  to { transform: translateY(0); }
-}
-
-.modal-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 14px;
-  border-bottom: 1px solid #eee;
-}
-
-.modal-title {
-  font-weight: 600;
-}
-
-.modal-btn {
-  background: none;
-  border: none;
-  font-size: 16px;
-  color: var(--secondary-text);
-}
-
-.modal-btn.accent {
-  color: var(--accent);
-  font-weight: 600;
-}
-
-.modal-body {
-  padding: 14px;
-}
-
-.modal-body label {
-  display: block;
-  margin-bottom: 14px;
-  font-size: 14px;
-  color: var(--secondary-text);
-}
-
-.modal-body select,
-.modal-body input {
-  width: 100%;
-  padding: 10px;
-  margin-top: 6px;
-  font-size: 16px;
-  border-radius: 10px;
-  border: 1px solid #ddd;
-  background: var(--card-color);
-  color: var(--text-color);
-}
-
-.lesson-row {
-  display: flex;
+#lessonsList {
   padding: 12px;
-  background: var(--card-color);
-  border-radius: 12px;
-  margin-bottom: 8px;
+}
+
+.lesson {
+  position: relative;
+  overflow: hidden;
+  background: var(--card-bg);
+  border-radius: 14px;
+  margin-bottom: 10px;
+}
+
+.lesson-content {
+  position: relative;
+  z-index: 2;
+  display: flex;
   align-items: center;
+  padding: 12px;
+  transition: transform 0.25s ease;
+}
+
+.lesson.swiped .lesson-content {
+  transform: translateX(-80px);
 }
 
 .lesson-time {
@@ -206,27 +69,9 @@ body {
   flex: 1;
 }
 
-.lesson-student {
-  font-size: 16px;
-}
-
 .lesson-subject {
+  opacity: 0.6;
   font-size: 13px;
-  color: var(--secondary-text);
-}
-.lesson {
-  position: relative;
-  overflow: hidden;
-  touch-action: pan-y;
-}
-
-.lesson-content {
-  background: #fff;
-  transition: transform 0.25s ease;
-}
-
-.lesson.swiped .lesson-content {
-  transform: translateX(-80px);
 }
 
 .delete-btn {
@@ -239,4 +84,61 @@ body {
   color: #fff;
   border: none;
   font-weight: 600;
+  pointer-events: none;
+}
+
+.lesson.swiped .delete-btn {
+  pointer-events: auto;
+}
+
+.fab {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: #007aff;
+  color: #fff;
+  border: none;
+  font-size: 30px;
+}
+
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+}
+
+.modal.hidden {
+  display: none;
+}
+
+.modal-content {
+  background: var(--card-bg);
+  width: 100%;
+  border-radius: 16px 16px 0 0;
+  padding: 16px;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: space-between;
+}
+
+.side-menu {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 240px;
+  height: 100%;
+  background: var(--card-bg);
+  padding: 16px;
+}
+
+.side-menu.hidden {
+  display: none;
 }
