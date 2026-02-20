@@ -165,3 +165,6 @@ document.addEventListener('click', e => {
     swipedLesson = null;
   }
 });
+function openEditLesson(lesson) {
+  openModal();
+}
