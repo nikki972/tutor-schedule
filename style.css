@@ -183,3 +183,30 @@ body {
   background: var(--card-color);
   color: var(--text-color);
 }
+
+.lesson-row {
+  display: flex;
+  padding: 12px;
+  background: var(--card-color);
+  border-radius: 12px;
+  margin-bottom: 8px;
+  align-items: center;
+}
+
+.lesson-time {
+  width: 60px;
+  font-weight: 600;
+}
+
+.lesson-info {
+  flex: 1;
+}
+
+.lesson-student {
+  font-size: 16px;
+}
+
+.lesson-subject {
+  font-size: 13px;
+  color: var(--secondary-text);
+}
