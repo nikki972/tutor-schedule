@@ -128,3 +128,40 @@ function closeLessonModal() {
   renderHeader();
   renderLessons();
 });
+
+let swipedLesson = null;
+
+document.addEventListener('touchstart', e => {
+  const lesson = e.target.closest('.lesson');
+  if (!lesson) return;
+
+  lesson.startX = e.touches[0].clientX;
+});
+
+document.addEventListener('touchend', e => {
+  const lesson = e.target.closest('.lesson');
+  if (!lesson || lesson.startX === undefined) return;
+
+  const diffX = e.changedTouches[0].clientX - lesson.startX;
+
+  if (diffX < -40) {
+    if (swipedLesson && swipedLesson !== lesson) {
+      swipedLesson.classList.remove('swiped');
+    }
+    lesson.classList.add('swiped');
+    swipedLesson = lesson;
+  }
+
+  if (diffX > 40 && !lesson.classList.contains('swiped')) {
+    openEditLesson(lesson);
+  }
+
+  lesson.startX = null;
+});
+
+document.addEventListener('click', e => {
+  if (swipedLesson && !e.target.closest('.lesson')) {
+    swipedLesson.classList.remove('swiped');
+    swipedLesson = null;
+  }
+});
