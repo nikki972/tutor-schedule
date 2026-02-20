@@ -1,13 +1,16 @@
 import { isHoliday } from './holidays.js';
+import { openDB, addLesson, getLessonsByDate, lessonExists } from './db.js';
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
+  await openDB();
+
   const dayNameEl = document.getElementById('dayName');
   const dateEl = document.getElementById('date');
   const header = document.querySelector('.header');
+  const lessonsEl = document.querySelector('.lessons');
 
   const prevBtn = document.getElementById('prevDay');
   const nextBtn = document.getElementById('nextDay');
-
   const menuBtn = document.getElementById('menuBtn');
   const sideMenu = document.getElementById('sideMenu');
   const overlay = document.getElementById('overlay');
@@ -15,8 +18,12 @@ document.addEventListener('DOMContentLoaded', () => {
   const fab = document.querySelector('.fab');
   const modal = document.getElementById('lessonModal');
   const closeModal = document.getElementById('closeModal');
+  const saveLessonBtn = document.getElementById('saveLesson');
+
   const lessonDate = document.getElementById('lessonDate');
   const lessonTime = document.getElementById('lessonTime');
+  const subjectSelect = document.getElementById('subjectSelect');
+  const studentSelect = document.getElementById('studentSelect');
 
   let currentDate = new Date();
 
@@ -25,34 +32,53 @@ document.addEventListener('DOMContentLoaded', () => {
     'Среда','Четверг','Пятница','Суббота'
   ];
 
-  function formatDate(date) {
-    return ${String(date.getDate()).padStart(2,'0')}.${String(date.getMonth()+1).padStart(2,'0')};
+  function iso(date) {
+    return date.toISOString().slice(0,10);
   }
 
-  function isWeekend(date) {
-    const d = date.getDay();
-    return d === 0 || d === 6;
-  }
-
-  function renderDate() {
+  function renderHeader() {
     dayNameEl.textContent = dayNames[currentDate.getDay()];
-    dateEl.textContent = formatDate(currentDate);
+    dateEl.textContent =
+      `${String(currentDate.getDate()).padStart(2,'0')}.${String(currentDate.getMonth()+1).padStart(2,'0')}`;
 
-    if (isWeekend(currentDate) || isHoliday(currentDate)) {
-      header.classList.add('holiday');
-    } else {
-      header.classList.remove('holiday');
-    }
+    header.classList.toggle(
+      'holiday',
+      currentDate.getDay() === 0 ||
+      currentDate.getDay() === 6 ||
+      isHoliday(currentDate)
+    );
+  }
+
+  async function renderLessons() {
+    lessonsEl.innerHTML = '';
+    const lessons = await getLessonsByDate(iso(currentDate));
+
+    lessons
+      .sort((a,b) => a.time.localeCompare(b.time))
+      .forEach(l => {
+        const row = document.createElement('div');
+        row.className = 'lesson-row';
+        row.innerHTML = `
+          <div class="lesson-time">${l.time}</div>
+          <div class="lesson-info">
+            <div class="lesson-student">${l.studentName}</div>
+            <div class="lesson-subject">${l.subject}</div>
+          </div>
+        `;
+        lessonsEl.appendChild(row);
+      });
   }
 
   prevBtn.onclick = () => {
     currentDate.setDate(currentDate.getDate() - 1);
-    renderDate();
+    renderHeader();
+    renderLessons();
   };
 
   nextBtn.onclick = () => {
     currentDate.setDate(currentDate.getDate() + 1);
-    renderDate();
+    renderHeader();
+    renderLessons();
   };
 
   menuBtn.onclick = () => {
@@ -67,7 +93,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function openModal() {
     modal.classList.remove('hidden');
-    lessonDate.value = currentDate.toISOString().slice(0,10);
+    lessonDate.value = iso(currentDate);
     lessonTime.value = '10:00';
   }
 
@@ -78,9 +104,27 @@ document.addEventListener('DOMContentLoaded', () => {
   fab.onclick = openModal;
   closeModal.onclick = closeLessonModal;
 
-  modal.addEventListener('click', e => {
-    if (e.target === modal) closeLessonModal();
-  });
+  saveLessonBtn.onclick = async () => {
+    const lesson = {
+      id: crypto.randomUUID(),
+      date: lessonDate.value,
+      time: lessonTime.value,
+      subject: subjectSelect.value,
+      studentId: 'temp',
+      studentName: 'Ученик',
+      status: 'planned'
+    };
 
-  renderDate();
+    if (await lessonExists(lesson)) {
+      alert('Такое занятие уже существует');
+      return;
+    }
+
+    await addLesson(lesson);
+    closeLessonModal();
+    renderLessons();
+  };
+
+  renderHeader();
+  renderLessons();
 });
