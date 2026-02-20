@@ -1,93 +1,97 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Расписание</title>
-
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-
-  <link rel="manifest" href="manifest.json">
-  <link rel="stylesheet" href="style.css">
+  <link rel="manifest" href="manifest.json" />
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
-  <aside id="sideMenu" class="menu hidden">
-    <div class="menu-item">Расписание</div>
-    <div class="menu-item">Ученики</div>
-    <div class="menu-item">Аналитика</div>
+  <!-- Верхняя панель -->
+  <header class="top-bar">
+    <button id="menuBtn" class="icon-btn">☰</button>
+
+    <div class="date-header">
+      <button id="prevDay" class="nav-btn">‹</button>
+
+      <div id="dateTitle">
+        <div id="dayName">Понедельник</div>
+        <div id="dateValue">19.02</div>
+      </div>
+
+      <button id="nextDay" class="nav-btn">›</button>
+    </div>
+  </header>
+
+  <!-- Основной список занятий -->
+  <main id="lessonsList">
+    <!-- Пример занятия -->
+    <div class="lesson">
+      <div class="lesson-content">
+        <div class="lesson-time">15:00</div>
+        <div class="lesson-info">
+          <div class="lesson-name">Иван</div>
+          <div class="lesson-subject">Математика</div>
+        </div>
+      </div>
+      <button class="delete-btn">Удалить</button>
+    </div>
+  </main>
+
+  <!-- Кнопка добавления -->
+  <button id="addLessonBtn" class="fab">＋</button>
+
+  <!-- Модальное окно добавления / редактирования занятия -->
+  <div id="lessonModal" class="modal hidden">
+    <div class="modal-content">
+      <h2>Новое занятие</h2>
+
+      <label>
+        Ученик
+        <select id="studentSelect">
+          <option value="">Выберите</option>
+        </select>
+      </label>
+
+      <label>
+        Предмет
+        <select id="subjectSelect">
+          <option value="math">Математика</option>
+          <option value="physics">Физика</option>
+        </select>
+      </label>
+
+      <label>
+        Дата
+        <input type="date" id="lessonDate" />
+      </label>
+
+      <label>
+        Время начала
+        <input type="time" id="lessonTime" />
+      </label>
+
+      <div class="modal-actions">
+        <button id="cancelLessonBtn" class="secondary">Отмена</button>
+        <button id="saveLessonBtn" class="primary">Сохранить</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Боковое меню -->
+  <aside id="sideMenu" class="side-menu hidden">
+    <button class="menu-item">Расписание</button>
+    <button class="menu-item">Ученики</button>
+    <button class="menu-item">Аналитика</button>
 
     <div class="menu-footer">
       <button id="themeToggle">🌙 / ☀️</button>
     </div>
   </aside>
 
-  <div id="overlay" class="hidden"></div>
-
-  <div id="app">
-
-    <header class="header">
-      <button id="menuBtn" class="icon-btn">☰</button>
-      <button id="prevDay" class="icon-btn">‹</button>
-
-      <div class="header-center">
-        <div id="dayName" class="day-name"></div>
-        <div id="date" class="date"></div>
-      </div>
-
-      <button id="nextDay" class="icon-btn">›</button>
-    </header>
-
-    <section class="day-stats">
-      📊 Сегодня: 0 занятий • 0 ₽
-    </section>
-
-    <main class="lessons"></main>
-
-    <button class="fab">＋</button>
-
-  </div>
-
-  <div id="lessonModal" class="modal">
-    <div class="modal-content">
-
-      <div class="modal-header">
-        <button id="closeModal" class="modal-btn">Отмена</button>
-        <div class="modal-title">Новое занятие</div>
-        <button id="saveLesson" class="modal-btn accent">Добавить</button>
-      </div>
-
-      <div class="modal-body">
-
-        <label>
-          Ученик
-          <select id="studentSelect">
-            <option>— выбрать —</option>
-          </select>
-        </label>
-
-        <label>
-          Предмет
-          <select id="subjectSelect">
-            <option value="math">Математика</option>
-            <option value="physics">Физика</option>
-          </select>
-        </label>
-
-        <label>
-          Дата
-          <input type="date" id="lessonDate">
-        </label>
-
-        <label>
-          Время начала
-          <input type="time" id="lessonTime">
-        </label>
-
-      </div>
-
-    </div>
-  </div>
-
-  <script type="module" src="script.js"></script>
+  <script src="holidays.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
