@@ -1,148 +1,79 @@
-import { isHoliday } from './holidays.js';
-import { openDB, addLesson, getLessonsByDate, lessonExists } from './db.js';
+const lessonsList = document.getElementById('lessonsList');
+const modal = document.getElementById('lessonModal');
+const addBtn = document.getElementById('addLessonBtn');
+const cancelBtn = document.getElementById('cancelLessonBtn');
+const menuBtn = document.getElementById('menuBtn');
+const sideMenu = document.getElementById('sideMenu');
 
-document.addEventListener('DOMContentLoaded', async () => {
-  await openDB();
+let currentDate = new Date();
 
-  const dayNameEl = document.getElementById('dayName');
-  const dateEl = document.getElementById('date');
-  const header = document.querySelector('.header');
-  const lessonsEl = document.querySelector('.lessons');
+function renderDate() {
+  const dayNames = ['Воскресенье','Понедельник','Вторник','Среда','Четверг','Пятница','Суббота'];
+  document.getElementById('dayName').textContent = dayNames[currentDate.getDay()];
+  document.getElementById('dateValue').textContent =
+    currentDate.toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit' });
+}
 
-  const prevBtn = document.getElementById('prevDay');
-  const nextBtn = document.getElementById('nextDay');
-  const menuBtn = document.getElementById('menuBtn');
-  const sideMenu = document.getElementById('sideMenu');
-  const overlay = document.getElementById('overlay');
+renderDate();
 
-  const fab = document.querySelector('.fab');
-  const modal = document.getElementById('lessonModal');
-  const closeModal = document.getElementById('closeModal');
-  const saveLessonBtn = document.getElementById('saveLesson');
+document.getElementById('prevDay').onclick = () => {
+  currentDate.setDate(currentDate.getDate() - 1);
+  renderDate();
+};
 
-  const lessonDate = document.getElementById('lessonDate');
-  const lessonTime = document.getElementById('lessonTime');
-  const subjectSelect = document.getElementById('subjectSelect');
-  const studentSelect = document.getElementById('studentSelect');
-
-  let currentDate = new Date();
-
-  const dayNames = [
-    'Воскресенье','Понедельник','Вторник',
-    'Среда','Четверг','Пятница','Суббота'
-  ];
-
-  function iso(date) {
-    return date.toISOString().slice(0,10);
-  }
-
-  function renderHeader() {
-    dayNameEl.textContent = dayNames[currentDate.getDay()];
-    dateEl.textContent =
-      `${String(currentDate.getDate()).padStart(2,'0')}.${String(currentDate.getMonth()+1).padStart(2,'0')}`;
-
-    header.classList.toggle(
-      'holiday',
-      currentDate.getDay() === 0 ||
-      currentDate.getDay() === 6 ||
-      isHoliday(currentDate)
-    );
-  }
-
-  async function renderLessons() {
-    lessonsEl.innerHTML = '';
-    const lessons = await getLessonsByDate(iso(currentDate));
-
-    lessons
-      .sort((a,b) => a.time.localeCompare(b.time))
-      .forEach(l => {
-        const row = document.createElement('div');
-        row.className = 'lesson-row';
-        row.innerHTML = `
-          <div class="lesson-time">${l.time}</div>
-          <div class="lesson-info">
-            <div class="lesson-student">${l.studentName}</div>
-            <div class="lesson-subject">${l.subject}</div>
-          </div>
-        `;
-        lessonsEl.appendChild(row);
-      });
-  }
-
-  prevBtn.onclick = () => {
-    currentDate.setDate(currentDate.getDate() - 1);
-    renderHeader();
-    renderLessons();
-  };
-
-  nextBtn.onclick = () => {
-    currentDate.setDate(currentDate.getDate() + 1);
-    renderHeader();
-    renderLessons();
-  };
-
-  menuBtn.onclick = () => {
-    sideMenu.classList.remove('hidden');
-    overlay.classList.remove('hidden');
-  };
-
-  overlay.onclick = () => {
-    sideMenu.classList.add('hidden');
-    overlay.classList.add('hidden');
-  };
+document.getElementById('nextDay').onclick = () => {
+  currentDate.setDate(currentDate.getDate() + 1);
+  renderDate();
+};
 
 function openModal() {
-  modal.classList.add('active');
-  lessonDate.value = iso(currentDate);
-  lessonTime.value = '10:00';
+  modal.classList.remove('hidden');
 }
 
-function closeLessonModal() {
-  modal.classList.remove('active');
+function closeModal() {
+  modal.classList.add('hidden');
 }
 
-  fab.onclick = openModal;
-  closeModal.onclick = closeLessonModal;
+addBtn.onclick = openModal;
+cancelBtn.onclick = closeModal;
 
-  saveLessonBtn.onclick = async () => {
-    const lesson = {
-      id: crypto.randomUUID(),
-      date: lessonDate.value,
-      time: lessonTime.value,
-      subject: subjectSelect.value,
-      studentId: 'temp',
-      studentName: 'Ученик',
-      status: 'planned'
-    };
+menuBtn.onclick = () => {
+  sideMenu.classList.toggle('hidden');
+};
 
-    if (await lessonExists(lesson)) {
-      alert('Такое занятие уже существует');
-      return;
-    }
+function addLesson(time, name, subject) {
+  const div = document.createElement('div');
+  div.className = 'lesson';
+  div.innerHTML = `
+    <div class="lesson-content">
+      <div class="lesson-time">${time}</div>
+      <div class="lesson-info">
+        <div>${name}</div>
+        <div class="lesson-subject">${subject}</div>
+      </div>
+    </div>
+    <button class="delete-btn">Удалить</button>
+  `;
+  lessonsList.appendChild(div);
+}
 
-    await addLesson(lesson);
-    closeLessonModal();
-    renderLessons();
-  };
-
-  renderHeader();
-  renderLessons();
-});
+addLesson('15:00', 'Иван', 'Математика');
 
 let swipedLesson = null;
+let touchStartX = null;
 
 document.addEventListener('touchstart', e => {
   const lesson = e.target.closest('.lesson');
   if (!lesson) return;
-
-  lesson.startX = e.touches[0].clientX;
+  touchStartX = e.touches[0].clientX;
+  lesson._touching = true;
 });
 
 document.addEventListener('touchend', e => {
   const lesson = e.target.closest('.lesson');
-  if (!lesson || lesson.startX === undefined) return;
+  if (!lesson || !lesson._touching) return;
 
-  const diffX = e.changedTouches[0].clientX - lesson.startX;
+  const diffX = e.changedTouches[0].clientX - touchStartX;
 
   if (diffX < -40) {
     if (swipedLesson && swipedLesson !== lesson) {
@@ -156,15 +87,17 @@ document.addEventListener('touchend', e => {
     openEditLesson(lesson);
   }
 
-  lesson.startX = null;
+  lesson._touching = false;
+  touchStartX = null;
 });
 
 document.addEventListener('click', e => {
-  if (swipedLesson && !e.target.closest('.lesson')) {
+  if (swipedLesson && !e.target.closest('.lesson') && !e.target.closest('button')) {
     swipedLesson.classList.remove('swiped');
     swipedLesson = null;
   }
 });
-function openEditLesson(lesson) {
+
+function openEditLesson() {
   openModal();
 }
