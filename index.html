@@ -4,7 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Расписание</title>
-  <link rel="manifest" href="manifest.json" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -15,9 +14,9 @@
   <div class="date-header">
     <button id="prevDay" class="nav-btn">‹</button>
 
-    <div id="dateTitle">
-      <div id="dayName"></div>
-      <div id="dateValue"></div>
+    <div class="date-center" id="dateTitle">
+      <div id="dayName">Понедельник</div>
+      <div id="dateValue">19.02</div>
     </div>
 
     <button id="nextDay" class="nav-btn">›</button>
@@ -30,11 +29,13 @@
 
 <div id="lessonModal" class="modal hidden">
   <div class="modal-content">
-    <h2>Занятие</h2>
+    <h2>Новое занятие</h2>
 
     <label>
       Ученик
-      <select id="studentSelect"></select>
+      <select id="studentSelect">
+        <option value="">Выберите</option>
+      </select>
     </label>
 
     <label>
@@ -47,12 +48,12 @@
 
     <label>
       Дата
-      <input type="date" id="lessonDate">
+      <input type="date" id="lessonDate" />
     </label>
 
     <label>
-      Время
-      <input type="time" id="lessonTime">
+      Время начала
+      <input type="time" id="lessonTime" />
     </label>
 
     <div class="modal-actions">
